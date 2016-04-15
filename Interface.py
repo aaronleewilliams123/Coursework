@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from Database import Database
+from LessonCSS import *
+from LessonHistory import *
 import re
 
 
@@ -10,6 +12,7 @@ import re
 class Interface():
 
     def __init__(self, parent):
+        self.copy = parent
         self.window = Frame(parent)     # Main window frame initialized
         self.window.grid()
         self.container = Frame(self.window)     # Container window frame initialized - used to clear window
@@ -176,11 +179,12 @@ class Interface():
             lblCourse = Label(self.container, text="Course: " + row[1], font=('MS', 10))
             lblLesson = Label(frmCourse, text="Choose lesson: ", font=('MS', 10))
             lblOr = Label(frmCourse, text='or', font=('MS', 10))
-            cmbCourse = ttk.Combobox(frmCourse, width=17, state="readonly")
+            lesSelected = StringVar()
+            cmbCourse = ttk.Combobox(frmCourse, width=17, state="readonly", textvariable=lesSelected)
             btnSelect = Button(frmCourse, text='Go to Lesson', font=('MS', 10))
             btnHistory = Button(frmCourse, text='View History', font=('MS', 10))
 
-            cmbCourse['values'] = ["Lesson 1", "Lesson 2"]
+            cmbCourse['values'] = ["CSS", "History Of Computing"]
 
             # DELETE ME
             def select():
@@ -190,7 +194,13 @@ class Interface():
                     self.errMessage.config(text="You must choose a lesson!")
                     return
                 self.clearWindow()
-                print("Open Lesson Menu")
+                lesson(lesSelected.get())
+
+            def lesson(topic):
+                if(topic == "CSS"):
+                    LessonCSS(self.copy).cssPage1()
+                else:
+                    LessonHistory(self.copy).historyPage1()
 
             def history():
                 self.clearWindow()
